@@ -18,6 +18,12 @@ const Tokens = Vector{Token}
 const PuzzleElement = Union{AbstractString, Bracket}
 const BCPuzzle = Vector{PuzzleElement}
 
+function Base.:(==)(b1::Bracket, b2::Bracket)::Bool
+    (b1.clue == b2.clue) &&
+        ((b1.answer isa Missing && b2.answer isa Missing)
+         || b1.answer == b2.answer)
+end
+
 
 """
     tokenize_puzzle(::AbstractString)
@@ -117,7 +123,17 @@ function preduce end
 
 preduce(s::AbstractString) = s
 
-preduce(b::Bracket) = ismissing(b.answer) ? b : b.answer
+function preduce(b::Bracket)
+    if ismissing(b.answer)
+        c = preduce(b.clue)
+        if !isa(c, Vector)
+            c = PuzzleElement[c]
+        end
+        Bracket(c, missing)
+    else
+        b.answer
+    end
+end
 
 function preduce(p::Vector{PuzzleElement})::BCPuzzle
     reduced = BCPuzzle()
@@ -145,6 +161,9 @@ end
 
 Outputs the puzzle in a more readable format with lines indented
 proportional to bracket nesting.
+
+If a `Bracket` has an answer then it is printed immediately before the
+close braclet.
 """
 function show_puzzle(parsed::BCPuzzle)
     indent(depth) = "  " ^ depth
@@ -153,7 +172,8 @@ function show_puzzle(parsed::BCPuzzle)
     function sp1(depth, parsed::Bracket)
         println(indent(depth), "[")
         sp1(depth + 1, parsed.clue)
-        println(indent(depth), "]")
+        a = ismissing(parsed.answer) ? "" : parsed.answer
+        println(indent(depth), "$a]")
     end
     function sp1(depth, parsed::Vector)
         for p in parsed
