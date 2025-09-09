@@ -6,7 +6,6 @@ using Documenter
 Pkg.activate(joinpath(dirname(dirname(@__FILE__)), "Project.toml"))
 
 using BracketCityPuzzle
-using Documenter
 
 DocMeta.setdocmeta!(BracketCityPuzzle, :DocTestSetup, :(using BracketCityPuzzle); recursive=true)
 
