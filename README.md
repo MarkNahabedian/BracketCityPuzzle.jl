@@ -47,10 +47,3 @@ ans[1].answer = "youth"
 show_puzzle(preduce(parsed))
 ```
 
-
-## Definitions
-
-```@autodocs
-Modules = [BracketCityPuzzle]
-```
-
