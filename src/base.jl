@@ -1,7 +1,15 @@
-export Bracket, parse_puzzle, to_string, preduce, show_puzzle, findBracket
+export Bracket, parse_puzzle, to_string, preduce, show_puzzle,
+    walkBrackets, all_brackets, findBracket
 
 
-# const Expression #  :: Vector{Union{AbstractString, Bracket}}
+next_id = let
+    next_id = 1
+    function next_uid()
+        next_id += 1
+        next_id - 1
+    end
+end
+
 
 """
     Bracket(clue, answer)
@@ -9,8 +17,13 @@ export Bracket, parse_puzzle, to_string, preduce, show_puzzle, findBracket
 Represents a bracketed clue, and possibly its answer.
 """
 mutable struct Bracket
-    clue::Vector{Union{AbstractString, Bracket}}
+    uid::Int16
+    clue::Vector{Union{AbstractString, Bracket}}    # Vector{PuzzleElement}
     answer::Union{Missing, AbstractString}
+
+    function Bracket(clue)
+        new(next_id(), clue, missing)
+    end
 end
 
 const Token = Union{Symbol, AbstractString}
@@ -79,7 +92,7 @@ function parse_puzzle(tokens::Tokens)::BCPuzzle
             if token isa AbstractString
                 push!(parsed, token)
             elseif token == :openbracket
-                push!(parsed, Bracket(parse1(depth + 1), missing))
+                push!(parsed, Bracket(parse1(depth + 1)))
             elseif token == :closebracket
                 break
             else
@@ -129,7 +142,7 @@ function preduce(b::Bracket)
         if !isa(c, Vector)
             c = PuzzleElement[c]
         end
-        Bracket(c, missing)
+        Bracket(c)
     else
         b.answer
     end
@@ -170,7 +183,7 @@ function show_puzzle(parsed::BCPuzzle)
     sp1(depth, parsed::AbstractString) =
         println(indent(depth), parsed)
     function sp1(depth, parsed::Bracket)
-        println(indent(depth), "[")
+        println(indent(depth), "[$(parsed.uid)")
         sp1(depth + 1, parsed.clue)
         a = ismissing(parsed.answer) ? "" : parsed.answer
         println(indent(depth), "$a]")
@@ -185,6 +198,41 @@ end
 
 
 """
+    walkBrackets(f::Function, thing)
+
+Calls the function on eqch [`Bracket`](@ref) nested within `thing`.
+"""
+function walkBrackets(f::Function, thing)
+    function walk1(::AbstractString)
+    end
+    function walk1(b::Bracket)
+        f(b)
+        walkBrackets(f, b.clue)
+    end
+    function walk1(elts::Vector{PuzzleElement})
+        for e in elts
+            walkBrackets(f, e)
+        end
+    end
+    walk1(thing)
+end
+
+
+"""
+    all_brackets(parsed::BCPuzzle)
+
+Returns a vector of all of the [`Bracket`](@ref)s within `parsed`.
+"""
+function all_brackets(parsed::BCPuzzle)
+    brackets = Bracket[]
+    walkBrackets(parsed) do b
+        push!(brackets, b)
+    end
+    brackets
+end
+
+
+"""
     findBracket(test, ::BCPuzzle)::Vector{Bracket}
 
 Returns a vector of `Bracket` objects that match `test`, which can be
@@ -192,15 +240,26 @@ a predicate or a substring to match.
 """
 function findBracket end
 
+# What about searching for a word that is a Bracket answer?  If all of
+# the contained Brackets have answers then we can use the answer
+# values to make one long string.
+
+function findBracket(uid::Int16, parsed::BCPuzzle)::Vector{Bracket}
+    found = Bracket[]
+    walkBrackets(parsed) do b
+        if b.uid == uid
+            push!(found, b)
+            # It would be nice to have a short-circuiting exit.
+        end
+    end
+    found
+end
+
 function findBracket(string::AbstractString, parsed::BCPuzzle)
     findBracket(parsed) do str
         occursin(string, str)
     end
 end
-
-# What about searching for a word that is a Bracket answer?  If all of
-# the contained Brackets have answers then we can use the answer
-# values to make one long string.
 
 function findBracket(predicate::Function, parsed::BCPuzzle)::Vector{Bracket}
     found = Bracket[]

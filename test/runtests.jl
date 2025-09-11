@@ -22,6 +22,10 @@ using Test
         only(findBracket("message", p)).answer = "sent"
         only(findBracket("pre", p)).answer = "is"
         @test preduce(p) == PuzzleElement["This is a test."]
+        a = all_brackets(p)
+        @test length(a) == 2
+        ids = map(b -> b.uid, a)
+        @test ids .- ids[end] == 1:-1:0
     end
 end
 
