@@ -7,24 +7,24 @@ puzzle = &quot;&quot;&quot; &quot;Gari[like Larry [underdog vs. Goliath] or Ma[w
 parsed = parse_puzzle(puzzle)
 
 show_puzzle(parsed)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi"> &quot;Gari
-[
+[1
   like Larry
-  [
+  [2
     underdog vs. Goliath
   ]
    or Ma
-  [
+  [3
     wearing one
-    [
+    [4
       elp
-      [
+      [5
          out your credit card (bad idea, usually)
       ]
       e rof ,eulc siht
     ]
      is a good way to connect with the
-    [
-      [
+    [6
+      [7
         fancy kind of pen 🖋️
       ]
        of  (👵 ➡️ 👧)
@@ -33,26 +33,26 @@ show_puzzle(parsed)</code></pre><pre class="documenter-example-output"><code cla
   ma Gandhi 🦅
 ]
 i enters
-[
+[8
   time resisted by a t
-  [
+  [9
     weird or not di
-    [
+    [10
       able to be
-      [
+      [11
         &quot;As  on TV&quot; 📺
       ]
     ]
      by
-    [
+    [12
       customary number of weeks of
-      [
+      [13
         see and re
-        [
+        [14
           to &quot;get the &quot; of something is to under
-          [
+          [15
             &quot;I
-            [
+            [16
               word that will appear if you get this clue right
             ]
             ed&quot;
@@ -65,7 +65,8 @@ i enters
     ]
   ]
   ler, maybe 💤
-]</code></pre><p>Add some answers:</p><pre><code class="language-julia hljs">only(findBracket(&quot;kind of pen&quot;, parsed)).answer = &quot;fountain&quot;
+]
+les&quot;</code></pre><p>Add some answers:</p><pre><code class="language-julia hljs">only(findBracket(&quot;kind of pen&quot;, parsed)).answer = &quot;fountain&quot;
 
 only(findBracket(&quot;Goliath&quot;, parsed)).answer = &quot;David&quot;
 
@@ -86,17 +87,17 @@ only(findBracket(&quot;Larry&quot;, parsed)).answer = &quot;bald&quot;
 only(findBracket(&quot;clue right&quot;, parsed)).answer = &quot;corrected&quot;
 
 show_puzzle(preduce(parsed))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi"> &quot;Garibaldi enters
-[
+[8
   time resisted by a t
-  [
+  [9
     weird or not divisible by
-    [
+    [12
       customary number of weeks of
-      [
+      [13
         see and re
-        [
+        [14
           to &quot;get the &quot; of something is to under
-          [
+          [15
             &quot;I  correcteded&quot;
           ]
            the basic idea
@@ -107,4 +108,17 @@ show_puzzle(preduce(parsed))</code></pre><pre class="documenter-example-output">
     ]
   ]
   ler, maybe 💤
-]</code></pre><p>These are the remaining answers, but we don&#39;t het have a way to identify the <code>Bracket</code>s to associate them with: &quot;stand&quot;, &quot;gist&quot;, &quot;notice&quot;, &quot;two&quot;, &quot;odd&quot;, &quot;nap&quot;</p><ul><li><a href="#BracketCityPuzzle.Bracket"><code>BracketCityPuzzle.Bracket</code></a></li><li><a href="#BracketCityPuzzle.findBracket"><code>BracketCityPuzzle.findBracket</code></a></li><li><a href="#BracketCityPuzzle.parse_puzzle"><code>BracketCityPuzzle.parse_puzzle</code></a></li><li><a href="#BracketCityPuzzle.preduce"><code>BracketCityPuzzle.preduce</code></a></li><li><a href="#BracketCityPuzzle.show_puzzle-Tuple{Vector{Union{Bracket, AbstractString}}}"><code>BracketCityPuzzle.show_puzzle</code></a></li><li><a href="#BracketCityPuzzle.to_string"><code>BracketCityPuzzle.to_string</code></a></li><li><a href="#BracketCityPuzzle.tokenize_puzzle-Tuple{AbstractString}"><code>BracketCityPuzzle.tokenize_puzzle</code></a></li></ul><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="BracketCityPuzzle.Bracket" href="#BracketCityPuzzle.Bracket"><code>BracketCityPuzzle.Bracket</code></a> — <span class="docstring-category">Type</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">Bracket(clue, answer)</code></pre><p>Represents a bracketed clue, and possibly its answer.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/MarkNahabedian/BracketCityPuzzle.jl/blob/2bd54f13401a7d983a853a57a6b547d93d4fbbad/src/base.jl#L6-L10">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="BracketCityPuzzle.findBracket" href="#BracketCityPuzzle.findBracket"><code>BracketCityPuzzle.findBracket</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">findBracket(test, ::BCPuzzle)::Vector{Bracket}</code></pre><p>Returns a vector of <code>Bracket</code> objects that match <code>test</code>, which can be a predicate or a substring to match.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/MarkNahabedian/BracketCityPuzzle.jl/blob/2bd54f13401a7d983a853a57a6b547d93d4fbbad/src/base.jl#L187-L192">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="BracketCityPuzzle.parse_puzzle" href="#BracketCityPuzzle.parse_puzzle"><code>BracketCityPuzzle.parse_puzzle</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">parse_puzzle(string_or_token_vector)</code></pre><p>Parses the string representation of a Bracket City puzzle. The result is a vector of strings and nested Bracket objects.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/MarkNahabedian/BracketCityPuzzle.jl/blob/2bd54f13401a7d983a853a57a6b547d93d4fbbad/src/base.jl#L61-L66">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="BracketCityPuzzle.preduce" href="#BracketCityPuzzle.preduce"><code>BracketCityPuzzle.preduce</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">preduce(::BCPuzzle)::BCPuzzle</code></pre><p>Simplifies the puzzle to a new puzzle by substituting in any <a href="#BracketCityPuzzle.Bracket"><code>Bracket</code></a> answers that are known.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/MarkNahabedian/BracketCityPuzzle.jl/blob/2bd54f13401a7d983a853a57a6b547d93d4fbbad/src/base.jl#L116-L121">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="BracketCityPuzzle.show_puzzle-Tuple{Vector{Union{Bracket, AbstractString}}}" href="#BracketCityPuzzle.show_puzzle-Tuple{Vector{Union{Bracket, AbstractString}}}"><code>BracketCityPuzzle.show_puzzle</code></a> — <span class="docstring-category">Method</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">show_puzzle(parsed::BCPuzzle)</code></pre><p>Outputs the puzzle in a more readable format with lines indented proportional to bracket nesting.</p><p>If a <code>Bracket</code> has an answer then it is printed immediately before the close braclet.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/MarkNahabedian/BracketCityPuzzle.jl/blob/2bd54f13401a7d983a853a57a6b547d93d4fbbad/src/base.jl#L159-L167">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="BracketCityPuzzle.to_string" href="#BracketCityPuzzle.to_string"><code>BracketCityPuzzle.to_string</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">to_string(puzzle::BCPuzzle)::AbstractString</code></pre><p>Convert the puzzle to its textual representation.  This is the inverse of <a href="#BracketCityPuzzle.parse_puzzle"><code>parse_puzzle</code></a>.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/MarkNahabedian/BracketCityPuzzle.jl/blob/2bd54f13401a7d983a853a57a6b547d93d4fbbad/src/base.jl#L95-L100">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="BracketCityPuzzle.tokenize_puzzle-Tuple{AbstractString}" href="#BracketCityPuzzle.tokenize_puzzle-Tuple{AbstractString}"><code>BracketCityPuzzle.tokenize_puzzle</code></a> — <span class="docstring-category">Method</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">tokenize_puzzle(::AbstractString)</code></pre><p>Tokenizes the string to produce a Vector of tokens consisting of strings, <code>:openbracket</code> and <code>:closebracket</code> symbols.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/MarkNahabedian/BracketCityPuzzle.jl/blob/2bd54f13401a7d983a853a57a6b547d93d4fbbad/src/base.jl#L28-L33">source</a></section></article></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Tuesday 9 September 2025 21:03">Tuesday 9 September 2025</span>. Using Julia version 1.11.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+]
+les&quot;</code></pre><pre><code class="nohighlight hljs">only(findBracket(15, parsed)).answer = &quot;stand&quot;
+
+only(findBracket(14, parsed)).answer = &quot;gist&quot;
+
+only(findBracket(13, parsed)).answer = &quot;notice&quot;
+
+only(findBracket(12, parsed)).answer = &quot;two&quot;
+
+only(findBracket(9, parsed)).answer = &quot;odd&quot;
+
+only(findBracket(8, parsed)).answer = &quot;nap&quot;
+
+show_puzzle(preduce(parsed))</code></pre><ul><li><a href="#BracketCityPuzzle.Bracket"><code>BracketCityPuzzle.Bracket</code></a></li><li><a href="#BracketCityPuzzle.all_brackets-Tuple{Vector{Union{Bracket, AbstractString}}}"><code>BracketCityPuzzle.all_brackets</code></a></li><li><a href="#BracketCityPuzzle.findBracket"><code>BracketCityPuzzle.findBracket</code></a></li><li><a href="#BracketCityPuzzle.parse_puzzle"><code>BracketCityPuzzle.parse_puzzle</code></a></li><li><a href="#BracketCityPuzzle.preduce"><code>BracketCityPuzzle.preduce</code></a></li><li><a href="#BracketCityPuzzle.show_puzzle-Tuple{Vector{Union{Bracket, AbstractString}}}"><code>BracketCityPuzzle.show_puzzle</code></a></li><li><a href="#BracketCityPuzzle.to_string"><code>BracketCityPuzzle.to_string</code></a></li><li><a href="#BracketCityPuzzle.tokenize_puzzle-Tuple{AbstractString}"><code>BracketCityPuzzle.tokenize_puzzle</code></a></li><li><a href="#BracketCityPuzzle.walkBrackets-Tuple{Function, Any}"><code>BracketCityPuzzle.walkBrackets</code></a></li></ul><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="BracketCityPuzzle.Bracket" href="#BracketCityPuzzle.Bracket"><code>BracketCityPuzzle.Bracket</code></a> — <span class="docstring-category">Type</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">Bracket(clue, answer)</code></pre><p>Represents a bracketed clue, and possibly its answer.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/MarkNahabedian/BracketCityPuzzle.jl/blob/0c177a1418432eea9ed1711b2ebbc63faf758d7a/src/base.jl#L18-L22">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="BracketCityPuzzle.all_brackets-Tuple{Vector{Union{Bracket, AbstractString}}}" href="#BracketCityPuzzle.all_brackets-Tuple{Vector{Union{Bracket, AbstractString}}}"><code>BracketCityPuzzle.all_brackets</code></a> — <span class="docstring-category">Method</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">all_brackets(parsed::BCPuzzle)</code></pre><p>Returns a vector of all of the <a href="#BracketCityPuzzle.Bracket"><code>Bracket</code></a>s within <code>parsed</code>.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/MarkNahabedian/BracketCityPuzzle.jl/blob/0c177a1418432eea9ed1711b2ebbc63faf758d7a/src/base.jl#L222-L226">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="BracketCityPuzzle.findBracket" href="#BracketCityPuzzle.findBracket"><code>BracketCityPuzzle.findBracket</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">findBracket(test, ::BCPuzzle)::Vector{Bracket}</code></pre><p>Returns a vector of <code>Bracket</code> objects that match <code>test</code>, which can be a predicate or a substring to match.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/MarkNahabedian/BracketCityPuzzle.jl/blob/0c177a1418432eea9ed1711b2ebbc63faf758d7a/src/base.jl#L236-L241">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="BracketCityPuzzle.parse_puzzle" href="#BracketCityPuzzle.parse_puzzle"><code>BracketCityPuzzle.parse_puzzle</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">parse_puzzle(string_or_token_vector)</code></pre><p>Parses the string representation of a Bracket City puzzle. The result is a vector of strings and nested Bracket objects.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/MarkNahabedian/BracketCityPuzzle.jl/blob/0c177a1418432eea9ed1711b2ebbc63faf758d7a/src/base.jl#L74-L79">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="BracketCityPuzzle.preduce" href="#BracketCityPuzzle.preduce"><code>BracketCityPuzzle.preduce</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">preduce(::BCPuzzle)::BCPuzzle</code></pre><p>Simplifies the puzzle to a new puzzle by substituting in any <a href="#BracketCityPuzzle.Bracket"><code>Bracket</code></a> answers that are known.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/MarkNahabedian/BracketCityPuzzle.jl/blob/0c177a1418432eea9ed1711b2ebbc63faf758d7a/src/base.jl#L130-L135">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="BracketCityPuzzle.show_puzzle-Tuple{Vector{Union{Bracket, AbstractString}}}" href="#BracketCityPuzzle.show_puzzle-Tuple{Vector{Union{Bracket, AbstractString}}}"><code>BracketCityPuzzle.show_puzzle</code></a> — <span class="docstring-category">Method</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">show_puzzle(parsed::BCPuzzle)</code></pre><p>Outputs the puzzle in a more readable format with lines indented proportional to bracket nesting.</p><p>If a <code>Bracket</code> has an answer then it is printed immediately before the close braclet.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/MarkNahabedian/BracketCityPuzzle.jl/blob/0c177a1418432eea9ed1711b2ebbc63faf758d7a/src/base.jl#L173-L181">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="BracketCityPuzzle.to_string" href="#BracketCityPuzzle.to_string"><code>BracketCityPuzzle.to_string</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">to_string(puzzle::BCPuzzle)::AbstractString</code></pre><p>Convert the puzzle to its textual representation.  This is the inverse of <a href="#BracketCityPuzzle.parse_puzzle"><code>parse_puzzle</code></a>.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/MarkNahabedian/BracketCityPuzzle.jl/blob/0c177a1418432eea9ed1711b2ebbc63faf758d7a/src/base.jl#L109-L114">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="BracketCityPuzzle.tokenize_puzzle-Tuple{AbstractString}" href="#BracketCityPuzzle.tokenize_puzzle-Tuple{AbstractString}"><code>BracketCityPuzzle.tokenize_puzzle</code></a> — <span class="docstring-category">Method</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">tokenize_puzzle(::AbstractString)</code></pre><p>Tokenizes the string to produce a Vector of tokens consisting of strings, <code>:openbracket</code> and <code>:closebracket</code> symbols.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/MarkNahabedian/BracketCityPuzzle.jl/blob/0c177a1418432eea9ed1711b2ebbc63faf758d7a/src/base.jl#L44-L49">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="BracketCityPuzzle.walkBrackets-Tuple{Function, Any}" href="#BracketCityPuzzle.walkBrackets-Tuple{Function, Any}"><code>BracketCityPuzzle.walkBrackets</code></a> — <span class="docstring-category">Method</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">walkBrackets(f::Function, thing)</code></pre><p>Calls the function on eqch <a href="#BracketCityPuzzle.Bracket"><code>Bracket</code></a> nested within <code>thing</code>.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/MarkNahabedian/BracketCityPuzzle.jl/blob/0c177a1418432eea9ed1711b2ebbc63faf758d7a/src/base.jl#L201-L205">source</a></section></article></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Friday 12 September 2025 13:00">Friday 12 September 2025</span>. Using Julia version 1.11.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
