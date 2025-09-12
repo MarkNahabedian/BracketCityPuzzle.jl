@@ -50,9 +50,21 @@ only(findBracket("clue right", parsed)).answer = "corrected"
 show_puzzle(preduce(parsed))
 ```
 
-These are the remaining answers, but we don't het have a way to
-identify the `Bracket`s to associate them with: "stand", "gist",
-"notice", "two", "odd", "nap"
+```
+only(findBracket(15, parsed)).answer = "stand"
+
+only(findBracket(14, parsed)).answer = "gist"
+
+only(findBracket(13, parsed)).answer = "notice"
+
+only(findBracket(12, parsed)).answer = "two"
+
+only(findBracket(9, parsed)).answer = "odd"
+
+only(findBracket(8, parsed)).answer = "nap"
+
+show_puzzle(preduce(parsed))
+```
 
 
 ```@index
