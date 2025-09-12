@@ -2,12 +2,16 @@ export Bracket, parse_puzzle, to_string, preduce, show_puzzle,
     walkBrackets, all_brackets, findBracket
 
 
-next_id = let
-    next_id = 1
-    function next_uid()
-        next_id += 1
-        next_id - 1
-    end
+mutable struct BracketUIDGenerator
+    next_id::Int
+
+    BracketUIDGenerator() = new(1)
+end
+
+function (g::BracketUIDGenerator)()
+    id = g.next_id
+    g.next_id += 1
+    return id
 end
 
 
@@ -17,13 +21,12 @@ end
 Represents a bracketed clue, and possibly its answer.
 """
 mutable struct Bracket
-    uid::Int16
+    uid::Int
     clue::Vector{Union{AbstractString, Bracket}}    # Vector{PuzzleElement}
     answer::Union{Missing, AbstractString}
 
-    function Bracket(clue)
-        new(next_id(), clue, missing)
-    end
+    Bracket(uid, clue, answer) = new(uid, clue, answer)
+    Bracket(uid, clue) = new(uid, clue, missing)
 end
 
 const Token = Union{Symbol, AbstractString}
@@ -45,29 +48,26 @@ Tokenizes the string to produce a Vector of tokens consisting of
 strings, `:openbracket` and `:closebracket` symbols.
 """
 function tokenize_puzzle(puzzle::AbstractString)::Tokens
-    indices = findall(puzzle) do c
-        c in [ '[', ']' ]
-    end
-    tokens = Tokens()
-    start = 1
-    for i in indices
-        if i > start
-            push!(tokens, puzzle[start : prevind(puzzle, i)])
+    textbuffer = IOBuffer()
+    tokens = Token[]
+    function text_buffer_token()
+        if textbuffer.size > 0
+            push!(tokens, String(take!(textbuffer)))
         end
-        c = puzzle[i]
-        if c == '['
+    end
+    for char in puzzle
+        if char == '['
+            text_buffer_token()
             push!(tokens, :openbracket)
-        elseif c == ']'
+        elseif char == ']'
+            text_buffer_token()
             push!(tokens, :closebracket)
         else
-            error("unrecognized token '$c'")
+            write(textbuffer, char)
         end
-        start = i + 1
     end
-    if start <= length(puzzle)
-        push!(tokens, puzzle[start:end])
-    end
-    tokens       
+    text_buffer_token()
+    tokens
 end
 
 
@@ -84,6 +84,7 @@ function parse_puzzle(puzzle::AbstractString)::BCPuzzle
 end
 
 function parse_puzzle(tokens::Tokens)::BCPuzzle
+    idgen = BracketUIDGenerator()
     function parse1(depth)
         parsed = PuzzleElement[]
         while (!isempty(tokens))
@@ -92,7 +93,7 @@ function parse_puzzle(tokens::Tokens)::BCPuzzle
             if token isa AbstractString
                 push!(parsed, token)
             elseif token == :openbracket
-                push!(parsed, Bracket(parse1(depth + 1)))
+                push!(parsed, Bracket(idgen(), parse1(depth + 1)))
             elseif token == :closebracket
                 break
             else
@@ -142,7 +143,7 @@ function preduce(b::Bracket)
         if !isa(c, Vector)
             c = PuzzleElement[c]
         end
-        Bracket(c)
+        Bracket(b.uid, c, b.answer)
     else
         b.answer
     end
@@ -183,10 +184,10 @@ function show_puzzle(parsed::BCPuzzle)
     sp1(depth, parsed::AbstractString) =
         println(indent(depth), parsed)
     function sp1(depth, parsed::Bracket)
-        println(indent(depth), "[$(parsed.uid)")
-        sp1(depth + 1, parsed.clue)
         a = ismissing(parsed.answer) ? "" : parsed.answer
-        println(indent(depth), "$a]")
+        println(indent(depth), "[$(parsed.uid) $a")
+        sp1(depth + 1, parsed.clue)
+        println(indent(depth), "]")
     end
     function sp1(depth, parsed::Vector)
         for p in parsed
@@ -244,7 +245,7 @@ function findBracket end
 # the contained Brackets have answers then we can use the answer
 # values to make one long string.
 
-function findBracket(uid::Int16, parsed::BCPuzzle)::Vector{Bracket}
+function findBracket(uid::Int, parsed::BCPuzzle)::Vector{Bracket}
     found = Bracket[]
     walkBrackets(parsed) do b
         if b.uid == uid
