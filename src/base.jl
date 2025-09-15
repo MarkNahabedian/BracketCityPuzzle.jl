@@ -1,5 +1,6 @@
-export Bracket, parse_puzzle, to_string, preduce, show_puzzle,
-    walkBrackets, all_brackets, findBracket
+export Bracket, set_answer, parse_puzzle, has_answer, issolved,
+    to_string, preduce, show_puzzle, walkBrackets, all_brackets,
+    findBracket
 
 
 mutable struct BracketUIDGenerator
@@ -38,6 +39,18 @@ function Base.:(==)(b1::Bracket, b2::Bracket)::Bool
     (b1.clue == b2.clue) &&
         ((b1.answer isa Missing && b2.answer isa Missing)
          || b1.answer == b2.answer)
+end
+
+
+"""
+    set_answer(parsed::BCPuzzle, bracket_id::Int, answer::AbstractString)
+
+Find the `Bracket` with the specified `bracket_id` and set its answer
+to `answer`.
+"""
+function set_answer(parsed::BCPuzzle, bracket_id::Int, answer::AbstractString)
+    b = only(findBracket(bracket_id, parsed))
+    b.answer = answer
 end
 
 
@@ -107,6 +120,30 @@ end
 
 
 """
+    hasanswer(::Bracket)
+
+Returns true if the Bracket has an answer.
+"""
+hasanswer(b::Bracket) = !isa(b.answer, Missing)
+
+
+"""
+    issolved(::PuzzleElement)::Bool
+
+Returns true if the puzzle element is solved.
+
+A [`bracket`](@ref) is solved only if it and all descendents are
+solved.
+"""
+function issolved(thing::PuzzleElement)::Bool
+    walk(::AbstractString) = true
+    walk(v::Vector) = all(walk, v)
+    walk(b::Bracket) = hasanswer(b) && walk(b.clue)
+    walk(thing)
+end
+
+
+"""
     to_string(puzzle::BCPuzzle)::AbstractString
 
 Convert the puzzle to its textual representation.  This is the inverse
@@ -138,14 +175,14 @@ function preduce end
 preduce(s::AbstractString) = s
 
 function preduce(b::Bracket)
-    if ismissing(b.answer)
+    if issolved(b)
+        b.answer
+    else
         c = preduce(b.clue)
         if !isa(c, Vector)
             c = PuzzleElement[c]
         end
         Bracket(b.uid, c, b.answer)
-    else
-        b.answer
     end
 end
 
