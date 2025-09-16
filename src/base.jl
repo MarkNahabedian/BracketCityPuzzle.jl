@@ -132,7 +132,7 @@ hasanswer(b::Bracket) = !isa(b.answer, Missing)
 
 Returns true if the puzzle element is solved.
 
-A [`bracket`](@ref) is solved only if it and all descendents are
+A [`Bracket`](@ref) is solved only if it and all descendents are
 solved.
 """
 function issolved(thing::PuzzleElement)::Bool
