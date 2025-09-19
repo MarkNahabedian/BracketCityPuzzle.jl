@@ -48,7 +48,7 @@ end
 Find the `Bracket` with the specified `bracket_id` and set its answer
 to `answer`.
 """
-function set_answer(parsed::BCPuzzle, bracket_id::Int, Union{Missing, answer::AbstractString})
+function set_answer(parsed::BCPuzzle, bracket_id::Int, answer::Union{Missing, AbstractString})
     b = only(findBracket(bracket_id, parsed))
     b.answer = answer
 end
