@@ -67,8 +67,12 @@ show_puzzle(preduce(parsed))
 ```
 
 
+## Index
+
 ```@index
 ```
+
+## Definitions
 
 ```@autodocs
 Modules = [BracketCityPuzzle]
