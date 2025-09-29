@@ -33,6 +33,9 @@ group behind "Mamma Mia"] dabba doo!" or "to [concept represented
 show_puzzle(parsed)
 ```
 
+Unfortunately, the "blank"  "___" characters are lost during the cut and
+paste of the puzzle text.
+
 Above, I can now see the puzzle in an indented "outline" style that
 makes the nesting of the brackets obvious.  Each bracket is identified
 with a unique number so we can indicate which clue is being answered.
