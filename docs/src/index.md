@@ -13,58 +13,73 @@ Monthly](https://www.theatlantic.com).
 
 ## Example
 
-```@example 1
+Here's an example that illustrates how this software can be helpful
+for back-solving some clues:
+
+```@example 2
 using BracketCityPuzzle
 
-# Puzzle from 2025-09-07:
-puzzle = """ "Gari[like Larry [underdog vs. Goliath] or Ma[wearing one [elp[ out your credit card (bad idea, usually)]e rof ,eulc siht] is a good way to connect with the [[fancy kind of pen 🖋️] of  (👵 ➡️ 👧)]]ma Gandhi 🦅]i enters [time resisted by a t[weird or not di[able to be [\"As  on TV\" 📺]] by [customary number of weeks of [see and re[to \"get the \" of something is to under[\"I  [word that will appear if you get this clue right]ed\"] the basic idea]er] given before leaving a job]]ler, maybe 💤]les" """
-
-parsed = parse_puzzle(puzzle)
+# Puzzle from 2025-09-29:
+parsed = parse_puzzle("""\"Willie ["to whom it  c[first word in many
+ [decadent break[⏩ ( [where you want to put your [the B in BFF] foot])]
+location]time stories]rn"]s makes "The [phrase ("y[Swedish pop
+group behind "Mamma Mia"] dabba doo!" or "to [concept represented
+ by a sideways [lucky number in 🇨🇳 (add [star count for a very
+ fancy [The Plaza or The [disc-shaped [ a joke/smile/window]er
+ with a finely s[☎️ conference ➡️  ⬅️ "of [heavy- (designed
+ for durability)]" 🪖]oped edge], e.g.]] to get an unlucky number
+ in 🇺🇸)]] and beyond!" 🚀, e.g.)]\"""")
 
 show_puzzle(parsed)
 ```
 
-Add some answers:
+Above, I can now see the puzzle in an indented "outline" style that
+makes the nesting of the brackets obvious.  Each bracket is identified
+with a unique number so we can indicate which clue is being answered.
+I can add those answers I can figure out:
 
-```@example 1
-only(findBracket("kind of pen", parsed)).answer = "fountain"
-
-only(findBracket("Goliath", parsed)).answer = "David"
-
-only(findBracket("on TV", parsed)).answer = "seen"
-
-only(findBracket("able to", parsed)).answer = "visible"
-
-only(findBracket("out your", parsed)).answer = "max"
-
-only(findBracket("👧", parsed)).answer = "youth"
-
-only(findBracket(",eulc", parsed)).answer = "backwards"
-
-only(findBracket("wearing", parsed)).answer = "hat"
-
-only(findBracket("Larry", parsed)).answer = "bald"
-
-only(findBracket("clue right", parsed)).answer = "corrected"
+```@example 2
+set_answer(parsed, 6, "best")
+set_answer(parsed, 5, "forward")
+set_answer(parsed, 8, "abba")
+set_answer(parsed, 14, "crack")
+set_answer(parsed, 16, "duty")
+set_answer(parsed, 15, "call")
+set_answer(parsed, 13, "ritz")
+set_answer(parsed, 12, "hotel")
+set_answer(parsed, 11, "five")
 
 show_puzzle(preduce(parsed))
 ```
 
-```
-only(findBracket(15, parsed)).answer = "stand"
+Above, [`preduce`](@ref) is used so that fully solved bracket
+expressions are replaced with their answers.
 
-only(findBracket(14, parsed)).answer = "gist"
+At this point, I wasn't able too figure out any of the highlighted
+clues, but I was able to figure out several outer clues, so I answered
+those:
 
-only(findBracket(13, parsed)).answer = "notice"
-
-only(findBracket(12, parsed)).answer = "two"
-
-only(findBracket(9, parsed)).answer = "odd"
-
-only(findBracket(8, parsed)).answer = "nap"
+```@example 2
+set_answer(parsed, 1, "may")           # to whom it may concern
+set_answer(parsed, 2, "once")          # cONCErn
+set_answer(parsed, 3, "bed")           # bedtime stories
 
 show_puzzle(preduce(parsed))
 ```
+
+Once I had the context for the remaining clues, their answers were
+straightforward
+
+```@example 2
+set_answer(parsed, 4, "fast")
+set_answer(parsed, 10, "eight")
+set_answer(parsed, 9, "infinity")
+set_answer(parsed, 7, "catch")
+show_puzzle(preduce(parsed))
+```
+
+That is why I find this software helpful for solving Bracket City puzzles.
+
 
 
 ## Index
