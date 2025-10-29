@@ -1,6 +1,6 @@
 using BracketCityPuzzle
 
-puzzle_text_DATE = """ """
+puzzle_text_DATE = raw""" """
 
 parsed = parse_puzzle(puzzle_text_DATE)
 
