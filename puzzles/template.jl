@@ -1,6 +1,8 @@
 using BracketCityPuzzle
 
-puzzle = raw""" """
+puzzle = Puzzle(DATESTRING,
+                raw"""
+""")
 
 show_puzzle(preduce(puzzle))
 
