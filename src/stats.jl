@@ -57,19 +57,23 @@ function stats_report()
     min_date = typemax(Date)
     max_date = typemin(Date)
     puzzle_count = 0
+    min_cluecount = typemax(Int)
     max_cluecount = 0
+    min_maxdepth = typemax(Int)
     max_maxdepth = 0
     for stat in values(PUZZLE_STATS)
         puzzle_count += 1
         min_date = min(min_date, stat.date)
         max_date = max(max_date, stat.date)
+        min_cluecount = min(min_cluecount, stat.cluecount)
         max_cluecount = max(max_cluecount, stat.cluecount)
+        min_maxdepth = min(min_maxdepth, stat.maxdepth)
         max_maxdepth = max(max_maxdepth, stat.maxdepth)
     end
     println("Over the period from $(Dates.format(min_date, PUZZLE_DATE_FORMAT))",
             " to $(Dates.format(max_date, PUZZLE_DATE_FORMAT)), ",
             "$puzzle_count puzzles were analyzed.\n",
-            "The maximum number of clues in a given puzzle was $max_cluecount.\n",
-            "The deepest clue nesting was $max_maxdepth.")
+            "The number of clues ranged from $min_cluecount to $max_cluecount.\n",
+            "The nesting depth ranged from $min_maxdepth to $max_maxdepth.")
 end
 
