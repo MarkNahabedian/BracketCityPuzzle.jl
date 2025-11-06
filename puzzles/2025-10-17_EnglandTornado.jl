@@ -23,5 +23,6 @@ set_answer(puzzle, 4, "12")
 set_answer(puzzle, 13, "three")        # bought the answer
 set_answer(puzzle, 12, "tri")
 set_answer(puzzle, 3, "zero")          # bought the answer
-set_answer(puzzle, 
-set_answer(puzzle, 
+
+show_puzzle(preduce(puzzle))
+
