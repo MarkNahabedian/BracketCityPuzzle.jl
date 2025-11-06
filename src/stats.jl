@@ -1,10 +1,19 @@
-export load_puzzles, PuzzleStats, collect_stats, PUZZLE_STATS, stats_report
+using Logging
+
+export load_puzzles, PuzzleStats, collect_stats, PUZZLE_STATS, stats_report,
+    generate_and_write_stats_report
 
 function load_puzzles()
     dir = joinpath(pkgdir(BracketCityPuzzle), "puzzles")
     for f in readdir(dir)
         if occursin(r"^\d\d\d\d-\d\d-\d\d", f)
-            include(joinpath(dir, f))
+            p = joinpath(dir, f)
+            println("\n\nLOADING $p")
+            try
+                include(p)
+            catch e
+                @info("Errror while loading $p", e)
+            end
         end
     end
 end
@@ -53,7 +62,7 @@ function collect_stats()
     end
 end
 
-function stats_report()
+function stats_report(io::IO)
     min_date = typemax(Date)
     max_date = typemin(Date)
     puzzle_count = 0
@@ -70,10 +79,27 @@ function stats_report()
         min_maxdepth = min(min_maxdepth, stat.maxdepth)
         max_maxdepth = max(max_maxdepth, stat.maxdepth)
     end
-    println("Over the period from $(Dates.format(min_date, PUZZLE_DATE_FORMAT))",
+    println(io,
+            "Over the period from $(Dates.format(min_date, PUZZLE_DATE_FORMAT))",
             " to $(Dates.format(max_date, PUZZLE_DATE_FORMAT)), ",
             "$puzzle_count puzzles were analyzed.\n",
             "The number of clues ranged from $min_cluecount to $max_cluecount.\n",
             "The nesting depth ranged from $min_maxdepth to $max_maxdepth.")
+end
+
+
+const STATS_REPORT_PATH =
+    abspath(joinpath(dirname(@__DIR__), "stats_report.txt"))
+
+
+function generate_and_write_stats_report()
+    Base.redirect_stdout(devnull) do
+        load_puzzles()
+    end
+    collect_stats()
+    open(STATS_REPORT_PATH, "w") do io
+        stats_report(io)
+    end
+    STATS_REPORT_PATH
 end
 

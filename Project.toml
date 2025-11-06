@@ -8,6 +8,7 @@ Cascadia = "54eefc05-d75b-58de-a785-1a3403f0919f"
 DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 Gumbo = "708ec375-b3d6-5a57-a7ce-8257bf98657a"
+Logging = "56ddb016-857b-54e1-b83d-db4d58db5568"
 WebScrapingTools = "8afffa6a-3076-4974-917d-2ce0a0fc8257"
 
 [sources]
@@ -18,6 +19,7 @@ Cascadia = "1.0.2"
 DataStructures = "0.19.1"
 Dates = "1.11.0"
 Gumbo = "0.8.3"
+Logging = "1.11.0"
 WebScrapingTools = "1.0.0"
 julia = "1.12"
 
