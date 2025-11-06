@@ -1,4 +1,4 @@
-musing BracketCityPuzzle
+using BracketCityPuzzle
 
 puzzle = Puzzle("2025-10-21",
                 raw""""A["this [no one likes [Doh [companion with [gym class initials 💪]di 💅]pulated by [pox officially e[🏄 word of appr[Office shape chosen by [when repeated, a [ [[word before defender or domain or enemy #[Air Force  ✈️]] opinion survey 💈]oi (the rabble)]ty-toity valediction]ft in 1909] or ☢️ unit]icated in 1980] hands]ing the [[document checked [number of times the Postman Always Rings] 🎅] for those who might get in] one] sucks", e.g.]n" wraps filming 👽""")
