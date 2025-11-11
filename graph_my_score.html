@@ -59,10 +59,12 @@
                   d3.select("#date-axis-group-left")
                       .attr("transform", `translate(${y_axis_width}, 0)`)
                       .call(d3.axisLeft(date_scale)
+                            .ticks(d3.timeSunday) 
                             .tickFormat(axis_date_format));
                   d3.select("#date-axis-group-right")
                       .attr("transform", `translate(${svg_width - y_axis_width}, 0)`)
                       .call(d3.axisRight(date_scale)
+                            .ticks(d3.timeSunday) 
                             .tickFormat(axis_date_format));
                   d3.select("#score-axis-group-top")
                       .attr("transform", `translate(0, ${x_axis_height})`)
