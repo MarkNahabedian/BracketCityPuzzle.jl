@@ -52,7 +52,7 @@
                   // domain to a value in their range.
                   let date_scale = d3.scaleUtc()
                       .domain([data[0].DATE, data.at(-1).DATE])
-                      .range([x_axis_height, svg_height - x_axis_height]);
+                      .range([svg_height - x_axis_height, x_axis_height]);
                   let score_scale = d3.scaleLinear()
                       .domain([0.0, 100.0])
                       .range([y_axis_width, svg_width - y_axis_width]);
