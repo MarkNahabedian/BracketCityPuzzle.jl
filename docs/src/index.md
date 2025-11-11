@@ -95,3 +95,14 @@ That is why I find this software helpful for solving Bracket City puzzles.
 ```@autodocs
 Modules = [BracketCityPuzzle]
 ```
+
+## My Score Graph
+
+A graph comparing my solved puzzle scores with tose of the entire
+Bracket City community can be found
+```@raw html
+<a href="graph_my_score.html">
+    here
+</a>.
+```
+

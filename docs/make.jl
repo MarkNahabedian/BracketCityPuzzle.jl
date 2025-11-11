@@ -23,6 +23,18 @@ makedocs(;
     ],
 )
 
+let
+    # Copy the score graph:
+    root = dirname(dirname(pathof(BracketCityPuzzle)))
+    mkpath(joinpath(root, "docs", "build"))
+    cp(joinpath(root, "my_score"),
+       joinpath(root, "docs", "build", "my_score");
+       force=true)
+    cp(joinpath(root, "graph_my_score.html"),
+       joinpath(root, "docs", "build", "graph_my_score.html");
+       force=true)
+end
+
 deploydocs(;
     repo="github.com/MarkNahabedian/BracketCityPuzzle.jl",
     devbranch="main",
