@@ -9,17 +9,15 @@
       .axis {
           color: yellow;
       }
-      .plot-body {
-          fill: none;
-          stroke-width: 5px;
-      }
       #my-score-path {
-          color: yellow;
-          fill: yellow;
+          stroke: green;
+          stroke-width: 1px;
+          fill: none;
       }
       #others-score-path {
-          color: blue;
-          fill: blue;
+          stroke: blue;
+          stroke-width: 1px;
+          fill: none;
       }
     </style>
     <script src="https://d3js.org/d3.v7.js"></script>
@@ -58,14 +56,6 @@
                   let score_scale = d3.scaleLinear()
                       .domain([0.0, 100.0])
                       .range([y_axis_width, svg_width - y_axis_width]);
-                  /*
-                  console.log("date scale ",
-                              data[0].DATE, date_scale(data[0].DATE),
-                              data[54].DATE, date_scale(data[54].DATE));
-                  console.log("score_scale ",
-                              0, score_scale(0),
-                              100, score_scale(100));
-                              */
                   d3.select("#date-axis-group-left")
                       .attr("transform", `translate(${y_axis_width}, 0)`)
                       .call(d3.axisLeft(date_scale)
@@ -80,7 +70,6 @@
                   d3.select("#score-axis-group-bottom")
                       .attr("transform", `translate(0, ${svg_height - x_axis_height})`)
                       .call(d3.axisBottom(score_scale));
-                  // So far, so good.
                   document.getElementById("my-score-path")
                       .setAttribute("d",
                                     d3.line()
@@ -98,7 +87,7 @@
   <body>
     <h1>Mark Nahabedian's BracketCity Scores</h1>
     <div>
-      <svg id="score-graph" width="90%" height="500">
+      <svg id="score-graph" width="90%" height="1000">
         <g id="score-axis-group-top" class="axis"/>
         <g id="score-axis-group-bottom" class="axis"/>
         <g id="date-axis-group-left" class="axis"/>
