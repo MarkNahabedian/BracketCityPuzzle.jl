@@ -32,7 +32,8 @@
               let svg_width = svg_rect.width;
               let svg_height = svg_rect.height;
               let x_axis_height = 20;    // space allocated to X axis ticks and labels
-              let y_axis_width = 40;     // space allocated to Y axis ticks and labels
+              let y_axis_width = 60;     // space allocated to Y axis ticks and labels
+              let axis_date_format = d3.timeFormat("%Y-%m-%d");
               // Load the data:
               let date_parser = d3.utcParse("%Y-%m-%d");
               (d3.tsv("my_score").then(function(data) {
@@ -67,10 +68,12 @@
                               */
                   d3.select("#date-axis-group-left")
                       .attr("transform", `translate(${y_axis_width}, 0)`)
-                      .call(d3.axisLeft(date_scale));
+                      .call(d3.axisLeft(date_scale)
+                            .tickFormat(axis_date_format));
                   d3.select("#date-axis-group-right")
                       .attr("transform", `translate(${svg_width - y_axis_width}, 0)`)
-                      .call(d3.axisRight(date_scale));
+                      .call(d3.axisRight(date_scale)
+                            .tickFormat(axis_date_format));
                   d3.select("#score-axis-group-top")
                       .attr("transform", `translate(0, ${x_axis_height})`)
                       .call(d3.axisTop(score_scale))
