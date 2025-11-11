@@ -1,6 +1,27 @@
 <html>
   <head>
     <title>Mark Nahabedian's BracketCity Scores</title>
+    <style>
+      body {
+          background-color: black;
+          color: yellow;
+      }
+      .axis {
+          color: yellow;
+      }
+      .plot-body {
+          fill: none;
+          stroke-width: 5px;
+      }
+      #my-score-path {
+          color: yellow;
+          fill: yellow;
+      }
+      #others-score-path {
+          color: blue;
+          fill: blue;
+      }
+    </style>
     <script src="https://d3js.org/d3.v7.js"></script>
     <script>
       document.addEventListener(
@@ -10,8 +31,8 @@
               let svg_rect = svg_elt.getBoundingClientRect();
               let svg_width = svg_rect.width;
               let svg_height = svg_rect.height;
-              let y_axis_offset = 30;
-              let x_axis_offset = 20;
+              let x_axis_height = 20;    // space allocated to X axis ticks and labels
+              let y_axis_width = 40;     // space allocated to Y axis ticks and labels
               // Load the data:
               let date_parser = d3.utcParse("%Y-%m-%d");
               (d3.tsv("my_score").then(function(data) {
@@ -32,14 +53,10 @@
                   // domain to a value in their range.
                   let date_scale = d3.scaleUtc()
                       .domain([data[0].DATE, data.at(-1).DATE])
-                      .range([x_axis_offset, svg_height]);
-                  console.assert(date_scale(data[0].DATE) == x_axis_offset);
-                  console.assert(date_scale(data.at(-1).DATE) == svg_height);
+                      .range([x_axis_height, svg_height - x_axis_height]);
                   let score_scale = d3.scaleLinear()
                       .domain([0.0, 100.0])
-                      .range([y_axis_offset, svg_width]);
-                  console.assert(score_scale(0.0) == y_axis_offset);
-                  console.assert(score_scale(100.0) == svg_width);
+                      .range([y_axis_width, svg_width - y_axis_width]);
                   /*
                   console.log("date scale ",
                               data[0].DATE, date_scale(data[0].DATE),
@@ -48,8 +65,18 @@
                               0, score_scale(0),
                               100, score_scale(100));
                               */
-                  d3.axisLeft(date_scale)(d3.select("#date-axis-group"));
-                  d3.axisTop(score_scale)(d3.select("#score-axis-group"));
+                  d3.select("#date-axis-group-left")
+                      .attr("transform", `translate(${y_axis_width}, 0)`)
+                      .call(d3.axisLeft(date_scale));
+                  d3.select("#date-axis-group-right")
+                      .attr("transform", `translate(${svg_width - y_axis_width}, 0)`)
+                      .call(d3.axisRight(date_scale));
+                  d3.select("#score-axis-group-top")
+                      .attr("transform", `translate(0, ${x_axis_height})`)
+                      .call(d3.axisTop(score_scale))
+                  d3.select("#score-axis-group-bottom")
+                      .attr("transform", `translate(0, ${svg_height - x_axis_height})`)
+                      .call(d3.axisBottom(score_scale));
                   // So far, so good.
                   document.getElementById("my-score-path")
                       .setAttribute("d",
@@ -69,10 +96,14 @@
     <h1>Mark Nahabedian's BracketCity Scores</h1>
     <div>
       <svg id="score-graph" width="90%" height="500">
-        <g id="score-axis-group"/>
-        <g id="date-axis-group"/>
-        <path id="my-score-path"/>
-        <path id="others-score-path")
+        <g id="score-axis-group-top" class="axis"/>
+        <g id="score-axis-group-bottom" class="axis"/>
+        <g id="date-axis-group-left" class="axis"/>
+        <g id="date-axis-group-right" class="axis"/>
+        <g class="plot-body">
+          <path id="my-score-path"/>
+          <path id="others-score-path"/>
+        </g>
       </svg>
     </div>
   </body>
