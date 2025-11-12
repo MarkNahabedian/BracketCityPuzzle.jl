@@ -1,0 +1,104 @@
+<html>
+  <head>
+    <title>Mark Nahabedian's BracketCity Scores</title>
+    <style>
+      body {
+          background-color: black;
+          color: yellow;
+      }
+      .axis {
+          color: yellow;
+      }
+      #my-score-path {
+          stroke: green;
+          stroke-width: 1px;
+          fill: none;
+      }
+      #others-score-path {
+          stroke: blue;
+          stroke-width: 1px;
+          fill: none;
+      }
+    </style>
+    <script src="https://d3js.org/d3.v7.js"></script>
+    <script>
+      document.addEventListener(
+          'DOMContentLoaded',
+          function () {
+              let svg_elt = document.getElementById("score-graph");
+              let svg_rect = svg_elt.getBoundingClientRect();
+              let svg_width = svg_rect.width;
+              let svg_height = svg_rect.height;
+              let x_axis_height = 20;    // space allocated to X axis ticks and labels
+              let y_axis_width = 60;     // space allocated to Y axis ticks and labels
+              let axis_date_format = d3.timeFormat("%Y-%m-%d");
+              // Load the data:
+              let date_parser = d3.utcParse("%Y-%m-%d");
+              (d3.tsv("my_score").then(function(data) {
+                  data.forEach(function(d) {
+                      d.DATE = date_parser(d.DATE);
+                      d.MY_SCORE = Number(d.MY_SCORE);
+                      d.CITYWIDE_AVERAGE = Number(d.CITYWIDE_AVERAGE);
+                  });
+                  data.sort(function(a, b) {
+                      return b.DATE - a.DATE;
+                  });
+                  DATA = data;
+                  return data;
+              }).catch(function (error) {
+                  console.error("Error loading my_score TSV file: ", error);
+              })).then(function (data) {
+                  // scales are functions which map a value in their
+                  // domain to a value in their range.
+                  let date_scale = d3.scaleUtc()
+                      .domain([data[0].DATE, data.at(-1).DATE])
+                      .range([svg_height - x_axis_height, x_axis_height]);
+                  let score_scale = d3.scaleLinear()
+                      .domain([0.0, 100.0])
+                      .range([y_axis_width, svg_width - y_axis_width]);
+                  d3.select("#date-axis-group-left")
+                      .attr("transform", `translate(${y_axis_width}, 0)`)
+                      .call(d3.axisLeft(date_scale)
+                            .ticks(d3.timeSunday) 
+                            .tickFormat(axis_date_format));
+                  d3.select("#date-axis-group-right")
+                      .attr("transform", `translate(${svg_width - y_axis_width}, 0)`)
+                      .call(d3.axisRight(date_scale)
+                            .ticks(d3.timeSunday) 
+                            .tickFormat(axis_date_format));
+                  d3.select("#score-axis-group-top")
+                      .attr("transform", `translate(0, ${x_axis_height})`)
+                      .call(d3.axisTop(score_scale))
+                  d3.select("#score-axis-group-bottom")
+                      .attr("transform", `translate(0, ${svg_height - x_axis_height})`)
+                      .call(d3.axisBottom(score_scale));
+                  document.getElementById("my-score-path")
+                      .setAttribute("d",
+                                    d3.line()
+                                    .x(d => score_scale(d.MY_SCORE))
+                                    .y(d => date_scale(d.DATE)) (data));
+                  document.getElementById("others-score-path")
+                      .setAttribute("d",
+                                    d3.line()
+                                    .x(d => score_scale(d.CITYWIDE_AVERAGE))
+                                    .y(d => date_scale(d.DATE))(data));
+              });
+          });
+    </script>
+  </head>
+  <body>
+    <h1>Mark Nahabedian's BracketCity Scores</h1>
+    <div>
+      <svg id="score-graph" width="90%" height="1000">
+        <g id="score-axis-group-top" class="axis"/>
+        <g id="score-axis-group-bottom" class="axis"/>
+        <g id="date-axis-group-left" class="axis"/>
+        <g id="date-axis-group-right" class="axis"/>
+        <g class="plot-body">
+          <path id="my-score-path"/>
+          <path id="others-score-path"/>
+        </g>
+      </svg>
+    </div>
+  </body>
+</html>
