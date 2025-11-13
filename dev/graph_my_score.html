@@ -9,19 +9,37 @@
       .axis {
           color: yellow;
       }
-      #my-score-path {
+      path.my-score {
           stroke: green;
           stroke-width: 1px;
           fill: none;
       }
-      #others-score-path {
+      circle.my-score {
+          fill: green;
+          stroke: none;
+      }
+      path.others-score {
           stroke: blue;
           stroke-width: 1px;
           fill: none;
       }
+      circle.others-score {
+          fill: blue;
+          stroke: none;
+      }
+      #tooltip-group{
+          positioon: absolute;
+      }
+      #tooltip-group text {
+      }
     </style>
     <script src="https://d3js.org/d3.v7.js"></script>
     <script>
+      const point_default_radius = 3;
+      const point_highlight_radius = 8;
+      const axis_date_format = d3.timeFormat("%Y-%m-%d");
+      const tooltip_date_format = d3.timeFormat("%Y-%m-%d");
+      
       document.addEventListener(
           'DOMContentLoaded',
           function () {
@@ -31,7 +49,6 @@
               let svg_height = svg_rect.height;
               let x_axis_height = 20;    // space allocated to X axis ticks and labels
               let y_axis_width = 60;     // space allocated to Y axis ticks and labels
-              let axis_date_format = d3.timeFormat("%Y-%m-%d");
               // Load the data:
               let date_parser = d3.utcParse("%Y-%m-%d");
               (d3.tsv("my_score").then(function(data) {
@@ -56,6 +73,7 @@
                   let score_scale = d3.scaleLinear()
                       .domain([0.0, 100.0])
                       .range([y_axis_width, svg_width - y_axis_width]);
+                  // Add axes:
                   d3.select("#date-axis-group-left")
                       .attr("transform", `translate(${y_axis_width}, 0)`)
                       .call(d3.axisLeft(date_scale)
@@ -72,22 +90,87 @@
                   d3.select("#score-axis-group-bottom")
                       .attr("transform", `translate(0, ${svg_height - x_axis_height})`)
                       .call(d3.axisBottom(score_scale));
+                  // Add graph lines:
                   document.getElementById("my-score-path")
                       .setAttribute("d",
                                     d3.line()
                                     .x(d => score_scale(d.MY_SCORE))
-                                    .y(d => date_scale(d.DATE)) (data));
+                                    .y(d => date_scale(d.DATE))(data));
                   document.getElementById("others-score-path")
                       .setAttribute("d",
                                     d3.line()
                                     .x(d => score_scale(d.CITYWIDE_AVERAGE))
                                     .y(d => date_scale(d.DATE))(data));
-              });
+                  // Add graph points:
+                  d3.select("#score-graph").selectAll("circle.my-score")  // initially empty
+                      .data(data)
+                      .enter()
+                      .append("circle")
+                      .attr("class", "my-score")
+                      .attr("cx", d => score_scale(d.MY_SCORE))
+                      .attr("cy", d => date_scale(d.DATE))
+                      .attr("r", point_default_radius)
+                      .on("mouseover", handleMouseOver)
+                      .on("mouseout", handleMouseOut)
+                      .on("mousemove", handleMouseMove);
+                  d3.select("#score-graph").selectAll("circle.others-score")  // initially empty
+                      .data(data)
+                      .enter()
+                      .append("circle")
+                      .attr("class", "others-score")
+                      .attr("cx", d => score_scale(d.CITYWIDE_AVERAGE))
+                      .attr("cy", d => date_scale(d.DATE))
+                      .attr("r", point_default_radius)
+                      .on("mouseover", handleMouseOver)
+                      .on("mouseout", handleMouseOut)
+                      .on("mousemove", handleMouseMove);
           });
+      });
+
+      // Tooltip support:
+
+      function handleMouseOver(event, d) {
+          // Show the tooltip
+          let tg = d3.select("#tooltip-group")
+          let txt = tg.select("text");
+          tg.style("display", "none");
+          let date_str = tooltip_date_format(d.DATE);
+          if (tg.node().classList.contains("my-score")) {
+              txt.test(`${date_str}: my score: ${d.MY_SCORE}`);
+          }
+          if (tg.node().classList.contains("others-score")) {
+              txt.test(`${date_str}: others score: ${d.OTHERS_SCORE}`);
+          }
+          // Highlight the point on hover
+          d3.select(this)
+              .attr("r", point_highlight_radius);  // Increase radius
+      }
+
+      function handleMouseOut(event, d) {
+          // Hide the tooltip
+          d3.select("#tooltip-group").style("display", null);
+          // Revert point size
+          d3.select(this)
+              .attr("r", point_default_radius);  // restore default radius
+      }
+
+      function handleMouseMove(event, d) {
+          // Position the tooltip relative to the mouse pointer
+          // Use d3.pointer(event) for modern D3 versions
+          let tt_x = event.pageX + 10;
+          let tt_y = event.pageY - 10;
+          d3.select("#tooltip-group")
+              .style("top", tt_y + "px")
+              .style("left", tt_x + "px");
+      }
     </script>
   </head>
   <body>
     <h1>Mark Nahabedian's BracketCity Scores</h1>
+    <g id="tooltip-group"
+       style="display: none">
+      <text></text>
+    </g>
     <div>
       <svg id="score-graph" width="90%" height="1000">
         <g id="score-axis-group-top" class="axis"/>
@@ -95,8 +178,8 @@
         <g id="date-axis-group-left" class="axis"/>
         <g id="date-axis-group-right" class="axis"/>
         <g class="plot-body">
-          <path id="my-score-path"/>
-          <path id="others-score-path"/>
+          <path id="my-score-path" class="my-score"/>
+          <path id="others-score-path" class="others-score"/>
         </g>
       </svg>
     </div>
