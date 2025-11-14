@@ -6,7 +6,7 @@ export load_puzzles, PuzzleStats, collect_stats, PUZZLE_STATS, stats_report,
 function load_puzzles()
     dir = joinpath(pkgdir(BracketCityPuzzle), "puzzles")
     for f in readdir(dir)
-        if occursin(r"^\d\d\d\d-\d\d-\d\d", f)
+        if occursin(r"^\d\d\d\d-\d\d-\d\d", f) && endswith(f, ".jl")
             p = joinpath(dir, f)
             println("\n\nLOADING $p")
             try
