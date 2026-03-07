@@ -1,7 +1,11 @@
 using Logging
+using CSV
+using DataFrames
+using Dates
 
 export load_puzzles, PuzzleStats, collect_stats, PUZZLE_STATS, stats_report,
-    generate_and_write_stats_report
+    generate_and_write_stats_report,
+    validate_my_score_file
 
 function load_puzzles()
     dir = joinpath(pkgdir(BracketCityPuzzle), "puzzles")
@@ -101,5 +105,14 @@ function generate_and_write_stats_report()
         stats_report(io)
     end
     STATS_REPORT_PATH
+end
+
+
+function validate_my_score_file()
+    my_score_file = abspath(joinpath(dirname(@__DIR__), "my_score"))
+    df = CSV.read(my_score_file, DataFrame)
+    @assert eltype(df[!, 1]) == Dates.Date
+    @assert eltype(df[!, 2]) <: AbstractFloat
+    @assert eltype(df[!, 3]) <: AbstractFloat
 end
 
